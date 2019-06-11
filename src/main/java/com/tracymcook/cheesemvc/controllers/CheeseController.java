@@ -1,5 +1,6 @@
 package com.tracymcook.cheesemvc.controllers;
 
+import com.tracymcook.cheesemvc.models.Cheese;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import java.util.Map;
 @RequestMapping("cheese") // this changes the request path to /cheese
 public class CheeseController {
 
-    static HashMap<String, String> cheeses = new HashMap<>();
+    static ArrayList<Cheese> cheeses = new ArrayList<>();
 
     // Request path: cheese/
     @RequestMapping(value = "")
@@ -37,8 +38,8 @@ public class CheeseController {
     // Request path: cheese/add
     @RequestMapping(value = "add", method = RequestMethod.POST) // processing of the form
     public String processAddCheeseForm(@RequestParam String cheeseName, @RequestParam String cheeseDescription) { // needs to match name in the form
-
-        cheeses.put(cheeseName, cheeseDescription);
+        Cheese newCheese = new Cheese(cheeseName, cheeseDescription);
+        cheeses.add(newCheese);
 
         // Redirect to cheese/
         return "redirect:";
@@ -46,7 +47,7 @@ public class CheeseController {
 
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemoveCheeseForm(Model model) {
-        model.addAttribute("cheeses", cheeses.keySet());
+        model.addAttribute("cheeses", cheeses);
         model.addAttribute("title", "Remove Cheese");
         return "cheese/remove";
     }
