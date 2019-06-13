@@ -4,8 +4,10 @@ import com.tracymcook.cheesemvc.models.Cheese;
 import com.tracymcook.cheesemvc.models.CheeseData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
@@ -29,12 +31,13 @@ public class CheeseController {
     public String displayAddCheeseForm(Model model) {
 
         model.addAttribute("title", "Add Cheese");
+        model.addAttribute(new Cheese()); // name of the class is by default the name of the view (in all lowercase)
         return "cheese/add";
     }
 
     // Request path: cheese/add
     @RequestMapping(value = "add", method = RequestMethod.POST) // processing of the form
-    public String processAddCheeseForm(@ModelAttribute Cheese newCheese) { // needs to match name in the form
+    public String processAddCheeseForm(@ModelAttribute @Valid Cheese newCheese, Errors errors, Model model) { // needs to match name in the form
 
         /* Code that's being implicitly run by SpringBoot
         *
@@ -45,6 +48,11 @@ public class CheeseController {
         * newCheese.setDescription(Request.getParameter("description"));
         * // this is why the names need to match
         */
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add Cheese");
+            return "cheese/add";
+        }
 
         CheeseData.add(newCheese);
 
