@@ -2,6 +2,7 @@ package com.tracymcook.cheesemvc.controllers;
 
 import com.tracymcook.cheesemvc.models.Cheese;
 import com.tracymcook.cheesemvc.models.CheeseData;
+import com.tracymcook.cheesemvc.models.CheeseType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -32,6 +33,7 @@ public class CheeseController {
 
         model.addAttribute("title", "Add Cheese");
         model.addAttribute(new Cheese()); // name of the class is by default the name of the view (in all lowercase)
+        model.addAttribute("cheeseTypes", CheeseType.values()); // gets the list of all types
         return "cheese/add";
     }
 
