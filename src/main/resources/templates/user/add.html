@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body class="container body-content">
+<body class="container">
 <h1 th:text="${title}">Default Title</h1>
 
 <form method="post" style="max-width:600px;" th:object="${user}">
     <div class="form-group">
         <label th:for="name-field">Username</label>
-        <input class="form-control" id="name-field" type="text"/> <!-- asterisk says use the name of the object tied to this form-->
+        <input class="form-control" id="name-field" type="text" name="username" /> <!-- asterisk says use the name of the object tied to this form-->
     </div>
     <div class="form-group">
-        <label th:for="description">Email</label>
-        <input class="form-control" id="desc-field" type="text" />
-    </div>
-
-    <div class="form-group">
-        <label th:for="description">Password</label>
-        <input class="form-control" id="pass-field" type="text" />
+        <label th:for="desc-field">Email</label>
+        <input class="form-control" id="desc-field" type="text" name="email" />
     </div>
 
     <div class="form-group">
-        <label th:for="verify-field">Verify</label>
-        <input class="form-control" id="verify-field" type="text" />
+        <label th:for="pass-field">Password</label>
+        <input class="form-control" id="pass-field" type="text" name="password" />
+    </div>
+
+    <div class="form-group">
+        <label th:for="verify-field">Verify Password</label>
+        <input class="form-control" id="verify-field" type="text" name="verify" />
     </div>
     <input type="submit" value="Add User" />
 </form>
