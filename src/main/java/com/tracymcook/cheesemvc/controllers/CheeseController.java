@@ -1,27 +1,28 @@
 package com.tracymcook.cheesemvc.controllers;
 
 import com.tracymcook.cheesemvc.models.Cheese;
-import com.tracymcook.cheesemvc.models.CheeseData;
 import com.tracymcook.cheesemvc.models.CheeseType;
+import com.tracymcook.cheesemvc.models.data.CheeseDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("cheese") // this changes the request path to /cheese
 public class CheeseController {
 
-
+    @Autowired
+    private CheeseDao cheeseDao;
 
     // Request path: cheese/
     @RequestMapping(value = "")
     public String index(Model model) {
 
-        model.addAttribute("cheeses", CheeseData.getAll());
+        model.addAttribute("cheeses", cheeseDao.findAll());
         model.addAttribute("title", "My Cheeses");
 
         return "cheese/index"; // just the name of the template, not the extension
@@ -56,33 +57,33 @@ public class CheeseController {
             return "cheese/add";
         }
 
-        CheeseData.add(newCheese);
+        cheeseDao.save(newCheese); // to save entity
 
         // Redirect to cheese/
         return "redirect:";
     }
 
 
-    @RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.GET)
-    public String displayEditForm(Model model, @PathVariable int cheeseId) {
-         Cheese c = CheeseData.getById(cheeseId);
-         model.addAttribute("cheese", c);
-         return "cheese/edit";
-    }
+    //@RequestMapping(value = "edit/{cheeseId}", method = RequestMethod.GET)
+    //public String displayEditForm(Model model, @PathVariable int cheeseId) {
+    //    Cheese c = CheeseData.getById(cheeseId);
+    //    model.addAttribute("cheese", c);
+    //    return "cheese/edit";
+    //}
 
 
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public String processEditForm(int cheeseId, String name, String description) {
-        Cheese c = CheeseData.getById(cheeseId); // grab object by the ID
-        c.setName(name); // use the setters to change the value
-        c.setDescription(description);
-        return "redirect:";
-    }
+    //@RequestMapping(value = "edit", method = RequestMethod.POST)
+    //public String processEditForm(int cheeseId, String name, String description) {
+    //    Cheese c = CheeseData.getById(cheeseId); // grab object by the ID
+    //    c.setName(name); // use the setters to change the value
+    //    c.setDescription(description);
+    //    return "redirect:";
+    //}
 
 
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemoveCheeseForm(Model model) {
-        model.addAttribute("cheeses", CheeseData.getAll());
+        model.addAttribute("cheeses", cheeseDao.findAll());
         model.addAttribute("title", "Remove Cheese");
         return "cheese/remove";
     }
@@ -91,7 +92,7 @@ public class CheeseController {
     public String processRemoveCheeseForm(@RequestParam int[] cheeseIds) {
 
         for (int cheeseId : cheeseIds) {
-            CheeseData.remove(cheeseId);
+            cheeseDao.delete(cheeseId);
         }
 
         return "redirect:";
